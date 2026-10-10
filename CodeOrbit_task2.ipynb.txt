@@ -1,0 +1,655 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "id": "oIn0pJQJLwEi"
+      },
+      "outputs": [],
+      "source": [
+        "import pandas as pd"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "data=pd.read_csv(\"/content/Sales Dataset.csv\")\n",
+        "data.head()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 206
+        },
+        "id": "L8_yUbx_L-8e",
+        "outputId": "383d644d-68a0-44dd-cbd4-502f9881eb42"
+      },
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "  Order ID  Amount  Profit  Quantity     Category      Sub-Category  \\\n",
+              "0  B-26776    9726    1275         5  Electronics  Electronic Games   \n",
+              "1  B-26776    9726    1275         5  Electronics  Electronic Games   \n",
+              "2  B-26776    9726    1275         5  Electronics  Electronic Games   \n",
+              "3  B-26776    4975    1330        14  Electronics          Printers   \n",
+              "4  B-26776    4975    1330        14  Electronics          Printers   \n",
+              "\n",
+              "  PaymentMode  Order Date   CustomerName     State     City Year-Month  \n",
+              "0         UPI  2023-06-27  David Padilla   Florida    Miami    2023-06  \n",
+              "1         UPI  2024-12-27  Connor Morgan  Illinois  Chicago    2024-12  \n",
+              "2         UPI  2021-07-25   Robert Stone  New York  Buffalo    2021-07  \n",
+              "3         UPI  2023-06-27  David Padilla   Florida    Miami    2023-06  \n",
+              "4         UPI  2024-12-27  Connor Morgan  Illinois  Chicago    2024-12  "
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-07923b95-0e5d-4760-8346-e78f72849199\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Order ID</th>\n",
+              "      <th>Amount</th>\n",
+              "      <th>Profit</th>\n",
+              "      <th>Quantity</th>\n",
+              "      <th>Category</th>\n",
+              "      <th>Sub-Category</th>\n",
+              "      <th>PaymentMode</th>\n",
+              "      <th>Order Date</th>\n",
+              "      <th>CustomerName</th>\n",
+              "      <th>State</th>\n",
+              "      <th>City</th>\n",
+              "      <th>Year-Month</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>B-26776</td>\n",
+              "      <td>9726</td>\n",
+              "      <td>1275</td>\n",
+              "      <td>5</td>\n",
+              "      <td>Electronics</td>\n",
+              "      <td>Electronic Games</td>\n",
+              "      <td>UPI</td>\n",
+              "      <td>2023-06-27</td>\n",
+              "      <td>David Padilla</td>\n",
+              "      <td>Florida</td>\n",
+              "      <td>Miami</td>\n",
+              "      <td>2023-06</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>B-26776</td>\n",
+              "      <td>9726</td>\n",
+              "      <td>1275</td>\n",
+              "      <td>5</td>\n",
+              "      <td>Electronics</td>\n",
+              "      <td>Electronic Games</td>\n",
+              "      <td>UPI</td>\n",
+              "      <td>2024-12-27</td>\n",
+              "      <td>Connor Morgan</td>\n",
+              "      <td>Illinois</td>\n",
+              "      <td>Chicago</td>\n",
+              "      <td>2024-12</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>B-26776</td>\n",
+              "      <td>9726</td>\n",
+              "      <td>1275</td>\n",
+              "      <td>5</td>\n",
+              "      <td>Electronics</td>\n",
+              "      <td>Electronic Games</td>\n",
+              "      <td>UPI</td>\n",
+              "      <td>2021-07-25</td>\n",
+              "      <td>Robert Stone</td>\n",
+              "      <td>New York</td>\n",
+              "      <td>Buffalo</td>\n",
+              "      <td>2021-07</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>B-26776</td>\n",
+              "      <td>4975</td>\n",
+              "      <td>1330</td>\n",
+              "      <td>14</td>\n",
+              "      <td>Electronics</td>\n",
+              "      <td>Printers</td>\n",
+              "      <td>UPI</td>\n",
+              "      <td>2023-06-27</td>\n",
+              "      <td>David Padilla</td>\n",
+              "      <td>Florida</td>\n",
+              "      <td>Miami</td>\n",
+              "      <td>2023-06</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>B-26776</td>\n",
+              "      <td>4975</td>\n",
+              "      <td>1330</td>\n",
+              "      <td>14</td>\n",
+              "      <td>Electronics</td>\n",
+              "      <td>Printers</td>\n",
+              "      <td>UPI</td>\n",
+              "      <td>2024-12-27</td>\n",
+              "      <td>Connor Morgan</td>\n",
+              "      <td>Illinois</td>\n",
+              "      <td>Chicago</td>\n",
+              "      <td>2024-12</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-07923b95-0e5d-4760-8346-e78f72849199')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-07923b95-0e5d-4760-8346-e78f72849199 button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-07923b95-0e5d-4760-8346-e78f72849199');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "    </div>\n",
+              "  </div>\n"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "dataframe",
+              "variable_name": "data",
+              "summary": "{\n  \"name\": \"data\",\n  \"rows\": 1194,\n  \"fields\": [\n    {\n      \"column\": \"Order ID\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 547,\n        \"samples\": [\n          \"B-25851\",\n          \"B-25400\",\n          \"B-26712\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"Amount\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 2804,\n        \"min\": 508,\n        \"max\": 9992,\n        \"num_unique_values\": 773,\n        \"samples\": [\n          2504,\n          670,\n          5376\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"Profit\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 1117,\n        \"min\": 50,\n        \"max\": 4930,\n        \"num_unique_values\": 707,\n        \"samples\": [\n          2510,\n          670,\n          3696\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"Quantity\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 5,\n        \"min\": 1,\n        \"max\": 20,\n        \"num_unique_values\": 20,\n        \"samples\": [\n          5,\n          8,\n          4\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"Category\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 3,\n        \"samples\": [\n          \"Electronics\",\n          \"Office Supplies\",\n          \"Furniture\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"Sub-Category\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 12,\n        \"samples\": [\n          \"Phones\",\n          \"Binders\",\n          \"Electronic Games\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"PaymentMode\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 5,\n        \"samples\": [\n          \"Debit Card\",\n          \"COD\",\n          \"EMI\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"Order Date\",\n      \"properties\": {\n        \"dtype\": \"object\",\n        \"num_unique_values\": 648,\n        \"samples\": [\n          \"2022-12-03\",\n          \"2022-08-01\",\n          \"2020-06-07\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"CustomerName\",\n      \"properties\": {\n        \"dtype\": \"string\",\n        \"num_unique_values\": 802,\n        \"samples\": [\n          \"Elizabeth Gonzalez\",\n          \"Stephanie Thomas\",\n          \"Randall Dennis\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"State\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 6,\n        \"samples\": [\n          \"Florida\",\n          \"Illinois\",\n          \"Ohio\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"City\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 18,\n        \"samples\": [\n          \"Miami\",\n          \"Chicago\",\n          \"Dallas\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"Year-Month\",\n      \"properties\": {\n        \"dtype\": \"object\",\n        \"num_unique_values\": 61,\n        \"samples\": [\n          \"2023-06\",\n          \"2022-11\",\n          \"2024-11\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    }\n  ]\n}"
+            }
+          },
+          "metadata": {},
+          "execution_count": 2
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "data.shape"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "O6jTxNhHMr2s",
+        "outputId": "c4b83c50-9e18-464e-cf10-9354ac75d1ab"
+      },
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "(1194, 12)"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 3
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "data.columns"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "WEjuYWrBMuB9",
+        "outputId": "4078a287-f4cb-4969-ece4-494052274625"
+      },
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Index(['Order ID', 'Amount', 'Profit', 'Quantity', 'Category', 'Sub-Category',\n",
+              "       'PaymentMode', 'Order Date', 'CustomerName', 'State', 'City',\n",
+              "       'Year-Month'],\n",
+              "      dtype='object')"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 6
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "data.info()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "jzACvXhGMwqL",
+        "outputId": "b1d2b719-8248-4a88-98a9-f91b4b7ce4ab"
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "RangeIndex: 1194 entries, 0 to 1193\n",
+            "Data columns (total 12 columns):\n",
+            " #   Column        Non-Null Count  Dtype \n",
+            "---  ------        --------------  ----- \n",
+            " 0   Order ID      1194 non-null   object\n",
+            " 1   Amount        1194 non-null   int64 \n",
+            " 2   Profit        1194 non-null   int64 \n",
+            " 3   Quantity      1194 non-null   int64 \n",
+            " 4   Category      1194 non-null   object\n",
+            " 5   Sub-Category  1194 non-null   object\n",
+            " 6   PaymentMode   1194 non-null   object\n",
+            " 7   Order Date    1194 non-null   object\n",
+            " 8   CustomerName  1194 non-null   object\n",
+            " 9   State         1194 non-null   object\n",
+            " 10  City          1194 non-null   object\n",
+            " 11  Year-Month    1194 non-null   object\n",
+            "dtypes: int64(3), object(9)\n",
+            "memory usage: 112.1+ KB\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "data.isnull().sum()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 460
+        },
+        "id": "gwwpqnbNNEYr",
+        "outputId": "3912b66f-ec4f-4859-bf50-36b4f1c26ad3"
+      },
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Order ID        0\n",
+              "Amount          0\n",
+              "Profit          0\n",
+              "Quantity        0\n",
+              "Category        0\n",
+              "Sub-Category    0\n",
+              "PaymentMode     0\n",
+              "Order Date      0\n",
+              "CustomerName    0\n",
+              "State           0\n",
+              "City            0\n",
+              "Year-Month      0\n",
+              "dtype: int64"
+            ],
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>0</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>Order ID</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Amount</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Profit</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Quantity</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Category</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Sub-Category</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>PaymentMode</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Order Date</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>CustomerName</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>State</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>City</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Year-Month</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div><br><label><b>dtype:</b> int64</label>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 7
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "total_sales = data['Amount'].sum()\n",
+        "print(\"Total Sales:\", total_sales)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "cyShHe2RNSvX",
+        "outputId": "f969c6c1-b48e-4660-9575-7a649e023a20"
+      },
+      "execution_count": 8,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Total Sales: 6182639\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "order_sales = data.groupby('Order ID')['Amount'].sum()\n",
+        "average_order_value = order_sales.mean()\n",
+        "print(\"Average Order Value:\", average_order_value)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "eQaioULuNnY7",
+        "outputId": "dab7d1d1-ced3-4f7b-f942-11f9371bac42"
+      },
+      "execution_count": 9,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Average Order Value: 11302.81352833638\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "top_products = data.groupby('Sub-Category')['Amount'].sum().sort_values(ascending=False)\n",
+        "print(top_products.head(5))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "pNbP34aTNnWq",
+        "outputId": "3c48b281-889a-4f7d-ae67-cd64f3437cda"
+      },
+      "execution_count": 10,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Sub-Category\n",
+            "Markers             627875\n",
+            "Tables              625177\n",
+            "Sofas               568367\n",
+            "Printers            566359\n",
+            "Electronic Games    565092\n",
+            "Name: Amount, dtype: int64\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "category_sales = data.groupby('Category')['Amount'].sum().sort_values(ascending=False)\n",
+        "print(category_sales)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "c9vX9m7ON631",
+        "outputId": "5719e42f-3b83-410e-b6fc-c7bc254159c9"
+      },
+      "execution_count": 11,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Category\n",
+            "Office Supplies    2089510\n",
+            "Electronics        2054456\n",
+            "Furniture          2038673\n",
+            "Name: Amount, dtype: int64\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "state_sales = data.groupby('State')['Amount'].sum().sort_values(ascending=False)\n",
+        "print(state_sales)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "tNw_xbJQN61I",
+        "outputId": "0c8c84c3-cd6f-4b94-9b88-9850883a8027"
+      },
+      "execution_count": 12,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "State\n",
+            "New York      1130048\n",
+            "Florida       1091174\n",
+            "California    1086436\n",
+            "Texas         1011475\n",
+            "Illinois       978738\n",
+            "Ohio           884768\n",
+            "Name: Amount, dtype: int64\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "monthly_sales = data.groupby('Year-Month')['Amount'].sum().sort_index()\n",
+        "print(monthly_sales)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "BNPb8U_WOK5F",
+        "outputId": "1708b139-da5f-409f-d7c6-fec5ad809e80"
+      },
+      "execution_count": 13,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Year-Month\n",
+            "2020-03     22991\n",
+            "2020-04    133385\n",
+            "2020-05    113287\n",
+            "2020-06     46900\n",
+            "2020-07     38556\n",
+            "            ...  \n",
+            "2024-11     60976\n",
+            "2024-12     98879\n",
+            "2025-01    112906\n",
+            "2025-02     84712\n",
+            "2025-03     52198\n",
+            "Name: Amount, Length: 61, dtype: int64\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
